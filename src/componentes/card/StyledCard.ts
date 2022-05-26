@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
 export const StyledCard = styled.div`
-  background: red;
+  background: #e0e094;
   border-radius: 2rem;
+  margin: 1rem;
+  width: 10rem;
 `;
