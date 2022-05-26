@@ -1,31 +1,39 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useToggle } from 'react-use';
-import { Modal } from '../src/componentes';
-import { Card } from '../src/componentes/card';
+import { Modal, Card } from '../src/componentes';
+import { getPokemonDetails, pokemonList } from '../src/pokemon/services';
 
-interface PokemonList {
-  name: string;
-  url: string;
-}
+import type { PokemonDetail, ResultsPokemonList } from '../src/pokemon/types';
 
 export const Pokedex: React.FC = () => {
   const [modal, setModal] = useToggle(false);
-  const [pokemons, setPokemons] = useState<PokemonList[]>([]);
+
+  const [pokemons, setPokemons] = useState<ResultsPokemonList[]>([]);
   const [selectedPokemon, setSelectedPokemon] = useState<
-    PokemonList | undefined
+    ResultsPokemonList | undefined
+  >(undefined);
+  const [selectedPokemonDetails, setPokemonDetails] = useState<
+    PokemonDetail | undefined
   >(undefined);
 
-  const setCardClick = (pokemon: PokemonList) => {
+  const setCardClick = (pokemon: ResultsPokemonList) => {
     setModal();
     setSelectedPokemon(pokemon);
   };
 
   useEffect(() => {
-    axios.get('https://pokeapi.co/api/v2/pokemon').then((response) => {
-      setPokemons(response.data.results);
+    pokemonList().then((response) => {
+      setPokemons(response.results);
     });
   }, []);
+
+  useEffect(() => {
+    if (!selectedPokemon) return;
+
+    getPokemonDetails(selectedPokemon.name).then((response) =>
+      setPokemonDetails(response)
+    );
+  }, [selectedPokemon]);
 
   return (
     <div>
@@ -41,6 +49,7 @@ export const Pokedex: React.FC = () => {
       {modal && (
         <Modal isOpen={modal} isClose={() => setModal(false)}>
           <h2> {selectedPokemon?.name}</h2>
+          <h3>{JSON.stringify(selectedPokemonDetails, undefined, 2)}</h3>
         </Modal>
       )}
     </div>
