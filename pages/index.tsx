@@ -1,10 +1,11 @@
 import type { NextPage } from 'next';
 import { Card } from '../src/componentes/card';
+import { Pokedex } from './Pokedex';
 
 const Home: NextPage = () => {
   return (
     <>
-      <Card>oie</Card>
+      <Pokedex />
     </>
   );
 };
