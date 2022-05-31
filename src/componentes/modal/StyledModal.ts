@@ -26,6 +26,7 @@ export const StyledModal = styled.div<ModalProps>`
   width: 20rem;
   height: 20rem;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 
